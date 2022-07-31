@@ -165,6 +165,3 @@ urlpatterns = [
     url(r'', HelloView.as_view(), name="index")
 ]
 ```
-
-## formsモジュール
-
