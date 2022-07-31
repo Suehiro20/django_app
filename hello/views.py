@@ -57,18 +57,19 @@ class HelloView(TemplateView):
     def __init__(self):
         self.params = {
             'title': 'Hello',
-            'message': 'your data:',
-            'form': HelloForm()
+            'form': HelloForm(),
+            'result': None,
         }
     
     def get(self, request):
         return render(request, 'hello/index.html', self.params)
     
     def post(self, request):
-        msg = 'あなたは<b>' + request.POST['name'] + \
-            '（' + request.POST['age'] + \
-            '）</b>さんです。<br>メールアドレスは <b>' + request.POST['mail'] + \
-            '</b> ですね。'
-        self.params['message'] = msg
+        ch = request.POST.getlist('choice')
+        result = '<ol><b>selected:</b>'
+        for i in ch:
+            result += '<li>' + i + '</li>'
+        result += '</ol>'
+        self.params['result'] = result
         self.params['form'] = HelloForm(request.POST)
         return render(request, 'hello/index.html', self.params)
