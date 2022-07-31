@@ -9,4 +9,5 @@ zexplain
     chap4.md
   database
     chap5.md
+    chap6.md
 ```
