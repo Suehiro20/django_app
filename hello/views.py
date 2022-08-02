@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm
+from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, CreateForm
 from .models import Friend
 from django.db.models import QuerySet
 
@@ -177,7 +177,7 @@ def manager(request):
         'title': 'Default',
         'data': data,
     }
-    return render(request, 'hello/manager.html', params)
+    return render(request, 'hello/manager/index.html', params)
 
 def managervalues(request):
     data = Friend.objects.all().values()
@@ -185,7 +185,7 @@ def managervalues(request):
         'title': 'Values',
         'data': data,
     }
-    return render(request, 'hello/manager.html', params)
+    return render(request, 'hello/manager/index.html', params)
 
 def managervalueslim(request):
     data = Friend.objects.all().values('id', 'name')
@@ -193,7 +193,7 @@ def managervalueslim(request):
         'title': 'ValuesLim',
         'data': data,
     }
-    return render(request, 'hello/manager.html', params)
+    return render(request, 'hello/manager/index.html', params)
 
 def managervalueslist(request):
     data = Friend.objects.all().values_list('id', 'name', 'age')
@@ -201,7 +201,7 @@ def managervalueslist(request):
         'title': 'ValuesList',
         'data': data,
     }
-    return render(request, 'hello/manager.html', params)
+    return render(request, 'hello/manager/index.html', params)
 
 def managervaluesothers(request):
     num = Friend.objects.all().count()
@@ -212,7 +212,7 @@ def managervaluesothers(request):
         'title': 'ValuesOthers',
         'data': data,
     }
-    return render(request, 'hello/manager.html', params)
+    return render(request, 'hello/manager/index.html', params)
 
 def __new_str__(self):
     result = ''
@@ -231,4 +231,40 @@ def managerqueryset(request):
         'title': 'QuerySet',
         'data': data,
     }
-    return render(request, 'hello/queryset.html', params)
+    return render(request, 'hello/manager/queryset.html', params)
+
+def createindex(request):
+    data = Friend.objects.all()
+    params = {
+        'title': 'Default',
+        'data': data,
+    }
+    return render(request, 'hello/create/index.html', params)
+
+def create(request):
+    params = {
+        'title': 'Create',
+        'form': Create(),
+    }
+    if (request.method == 'POST'):
+        name = request.POST['name']
+        mail = request.POST['mail']
+        gender = 'gender' in request.POST
+        age = int(request.POST['age'])
+        birth = request.POST['birthday']
+        friend = Friend(name=name, mail=mail, gender=gender, age=age, birthday=birth)
+        friend.save()
+        return redirect(to='/hello/create')
+    return render(request, 'hello/create/create.html', params)
+
+def createmeta(request):
+    if (request.method == 'POST'):
+        obj = Friend()
+        friend = CreateForm(request.POST, instance=obj)
+        friend.save()
+        return redirect(to='/hello/create')
+    params = {
+        'title': 'CreateMeta',
+        'form': CreateForm(),
+    }
+    return render(request, 'hello/create/create.html', params)

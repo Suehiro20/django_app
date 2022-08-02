@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'hello/css/style.css' %}" />
 </head>
 <body>
-    <h1>Hello/{{ title }}</h1>
+    <h1>Hello/Create/{{ title }}</h1>
     <table>
         <form action="{% url 'create' %}" method="post">
             {% csrf_token %}
