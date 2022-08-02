@@ -24,4 +24,7 @@ urlpatterns = [
     path('manager/values/list', views.managervalueslist, name='managervalueslist'),
     path('manager/values/others', views.managervaluesothers, name='managervaluesothers'),
     path('manager/queryset', views.managerqueryset, name='managerqueryset'),
+    path('create', views.createindex, name='createindex'),
+    path('create/create', views.create, name='create'),
+    path('create/meta', views.createmeta, name='createmeta'),
 ]
