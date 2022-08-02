@@ -48,3 +48,10 @@ class HelloForm(forms.Form):
 
 class IdForm(forms.Form):
     id = forms.IntegerField(label='ID')
+
+class Friend(forms.Form):
+    name = forms.CharField(label='Name')
+    mail = forms.EmailField(label='Email')
+    gender = forms.NullBooleanField(label='Gender')
+    age = forms.IntegerField(label='Age')
+    birthday = forms.DateField(label='Birth')
