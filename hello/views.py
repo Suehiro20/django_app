@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, CreateForm
+from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, FriendForm
 from .models import Friend
 from django.db.models import QuerySet
 
@@ -233,13 +233,13 @@ def managerqueryset(request):
     }
     return render(request, 'hello/manager/queryset.html', params)
 
-def createindex(request):
+def crudindex(request):
     data = Friend.objects.all()
     params = {
         'title': 'Default',
         'data': data,
     }
-    return render(request, 'hello/create/index.html', params)
+    return render(request, 'hello/crud/index.html', params)
 
 def create(request):
     params = {
@@ -254,17 +254,42 @@ def create(request):
         birth = request.POST['birthday']
         friend = Friend(name=name, mail=mail, gender=gender, age=age, birthday=birth)
         friend.save()
-        return redirect(to='/hello/create')
-    return render(request, 'hello/create/create.html', params)
+        return redirect(to='/hello/crud')
+    return render(request, 'hello/crud/create.html', params)
 
 def createmeta(request):
     if (request.method == 'POST'):
         obj = Friend()
-        friend = CreateForm(request.POST, instance=obj)
+        friend = FriendForm(request.POST, instance=obj)
         friend.save()
-        return redirect(to='/hello/create')
+        return redirect(to='/hello/crud')
     params = {
         'title': 'CreateMeta',
-        'form': CreateForm(),
+        'form': FriendForm(),
     }
-    return render(request, 'hello/create/create.html', params)
+    return render(request, 'hello/crud/create.html', params)
+
+def edit(request, num):
+    obj = Friend.objects.get(id=num)
+    if (request.method == 'POST'):
+        friend = FriendForm(request.POST, instance=obj)
+        friend.save()
+        return redirect(to='/hello/update')
+    params = {
+        'title': 'Update',
+        'id': num,
+        'form': FriendForm(instance=obj)
+    }
+    return render(request, 'hello/crud/edit.html', params)
+
+def delete(request, num):
+    friend = Friend.objects.get(id=num)
+    if (request.method == 'POST'):
+        friend.delete()
+        return redirect(to='/hello/crud')
+    params = {
+        'title': 'Delete',
+        'id': num,
+        'obj': friend
+    }
+    return render(request, 'hello/crud/delete.html', params)
