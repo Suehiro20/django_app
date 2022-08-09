@@ -57,7 +57,7 @@ class Create(forms.Form):
     age = forms.IntegerField(label='Age')
     birthday = forms.DateField(label='Birth')
 
-class CreateForm(forms.ModelForm):
+class FriendForm(forms.ModelForm):
     class Meta:
         model = Friend
         fields = ['name','mail','gender','age','birthday']

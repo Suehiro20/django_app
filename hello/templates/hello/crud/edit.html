@@ -9,19 +9,16 @@
     <link rel="stylesheet" type="text/css" href="{% static 'hello/css/style.css' %}" />
 </head>
 <body>
-    <h1>Hello/Create/{{ title }}</h1>
-    <p><a href="{% url 'createindex' %}">CreateDefault</a></p>
-    <p><a href="{% url 'create' %}">CreateCreate</a></p>
-    <p><a href="{% url 'createmeta' %}">CreateCreateMeta</a></p>
+    <h1>Hello/CRUD/{{ title }}</h1>
     <table>
-        <tr>
-            <th>data</th>
-        </tr>
-    {% for item in data %}
-        <tr>
-            <td>{{ item }}</td>
-        </tr>
-    {% endfor %}
+        <form action="{% url 'edit' id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td><input type="submit" value="click"></td>
+            </tr>
+        </form>
     </table>
 </body>
 </html>

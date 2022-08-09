@@ -191,3 +191,164 @@ ModelFormの「save」メソッドを呼び出すと、ModelFormに設定され�
 
 ## Update
 
+### urls.py
+今回は編集用にedit.htmlを作成する。これは、/edit/1というように、ID番号をURLに含むようにしておく。  
+こうしておくことで、どのレコードを編集するか指定できるようにする。  
+
+```py
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('create', views.create, name='create'),
+    path('edit/<int:num>', views.edit, name='edit'),
+]
+```
+
+### index.html
+レコード一覧に編集用のリンクを追記する。  
+
+```html
+{% for item in data %}
+    <tr>
+        <td>{{ item }}</td>
+        <td><a href="{% url 'edit' item.id %}">Edit</a></td>
+    </tr>
+{% endfor %}
+```
+
+`{% url 'edit' item.id %}`とすることで、/edit/1というようにeditの後にID番号をつけてアクセスできるようにしている。
+
+### edit.html
+編集ページのhtmlを作成する  
+以下はcreate.htmlと違う部分  
+
+```html
+<form action="{% url 'edit' id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <tr>
+        <td></td>
+        <td><input type="submit" value="click"></td>
+    </tr>
+</form>
+```
+
+### views.py
+```py
+def edit(request, num):
+    obj = Friend.objects.get(id=num)
+    if (request.method == 'POST'):
+        friend = FriendForm(request.POST, instance=obj)
+        friend.save()
+        return redirect(to='/hello')
+    params = {
+        'title': 'Update',
+        'id': num,
+        'form': FriendForm(instance=obj)
+    }
+    return render(request, 'hello/edit.html', params)
+```
+
+urlpatternsに用意したURLでは、`'edit/<int:num>'`というように設定していたので、アドレスのnumの値がそのまま引数numに渡される。  
+このnumの値を使って、Friendインスタンスを取得する。  
+
+インスタンスの取得は、getメソッドを使って行う。引数idに番号を指定すれば、そのID番号のインスタンスが取り出せる。  
+あとは、このFriendインスタンスを使ってFriendFormインスタンスを作成し、保存するだけ。  
+
+instance引数に、getで取得したインスタンスを指定している。フォームから送信された値(request.POST)は、createの時と同じように用意してある。  
+インスタンスを作成し、saveを呼び出せば、取得したFriendインスタンスの内容が更新されレコードが保存される。  
+
+## Delete
+まず、ID番号などを使って、削除するレコードのモデルインスタンスを取得しておく。  
+そして、そのインスタンスの「delete」メソッドを実行すれば、そのモデルに対応するレコードが削除される。  
+
+### urls.py
+```py
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('create', views.create, name='create'),
+    path('edit/<int:num>', views.edit, name='edit'),
+    path('delete/<int:num>', views.delete, name='delete')
+]
+```
+
+### index.html
+レコード一覧に削除用のリンクを追記する。  
+
+```html
+{% for item in data %}
+    <tr>
+        <td>{{ item }}</td>
+        <td><a href="{% url 'edit' item.id %}">Edit</a></td>
+        <td><a href="{% url 'delete' item.id %}">Edit</a></td>
+    </tr>
+{% endfor %}
+```
+
+### delete.html
+create.htmlとの違いは以下。
+
+```html
+<body>
+    <h1>Hello/CRUD/{{ title }}</h1>
+    <p>※ 以下のレコードを削除します。</p>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>{{ obj.id }}</th>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ obj.name }}</td>
+        </tr>
+        <tr>
+            <th>Gender</th>
+            <td>
+                {% if obj.gender == False %}male{% endif %}
+                {% if obj.gender == True %}female{% endif %}
+                {% if obj.gender == Unknown %}unknown{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ obj.mail }}</td>
+        </tr>
+        <tr>
+            <th>Age</th>
+            <td>{{ obj.age }}</td>
+        </tr>
+        <tr>
+            <th>Birth</th>
+            <td>{{ obj.birthday }}</td>
+        </tr>
+        <form action="{% url 'delete' id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td><input type="submit" value="click"></td>
+            </tr>
+        </form>
+    </table>
+</body>
+```
+
+### views.py
+```py
+def delete(request, num):
+    friend = Friend.objects.get(id=num)
+    if (request.method == 'POST'):
+        friend.delete()
+        return redirect(to='/hello')
+    params = {
+        'title': 'Delete',
+        'id': num,
+        'obj': friend
+    }
+    return render(request, 'hello/delete.html', params)
+```
+
+## CRUDまとめ
+「Read」についてはallやgetを使った処理でレコードを取り出しているので、すでにやっています。  
+
+CRUDは、データベースアクセスの基本であって、「データベースを使ったアプリの基本機能」というわけではないそうです。  
+データベースを使ったアプリを作ろうと思ったら、「検索」（いかに的確に必要なレコードを取り出すか）の方が重要だそうです。
