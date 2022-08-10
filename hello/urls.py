@@ -29,4 +29,5 @@ urlpatterns = [
     path('crud/create/meta', views.createmeta, name='createmeta'),
     path('crud/edit/<int:num>', views.edit, name='edit'),
     path('crud/delete/<int:num>', views.delete, name='delete'),
+    path('find', views.find, name='find'),
 ]
