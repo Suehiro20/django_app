@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'hello/css/style.css' %}" />
+</head>
+<body>
+    <h1>Hello/Manager/{{ title }}</h1>
+    <p><a href="{% url 'manager' %}">ManagerDefault</a></p>
+    <p><a href="{% url 'managervalues' %}">ManagerValues</a></p>
+    <p><a href="{% url 'managervalueslim' %}">ManagerValuesLim</a></p>
+    <p><a href="{% url 'managervalueslist' %}">ManagerValuesList</a></p>
+    <p><a href="{% url 'managervaluesothers' %}">ManagerValuesOthers</a></p>
+    <p><a href="{% url 'managerqueryset' %}">ManagerQuerySet</a></p>
+    <table>
+        <tr>
+            <th>data</th>
+        </tr>
+    {% for item in data %}
+        <tr>
+            <td>{{ item }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

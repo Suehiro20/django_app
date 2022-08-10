@@ -42,6 +42,31 @@ DATABASES = {
 }
 ```
 
+おそらく、
+```py
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+```
+ならば上記で良い  
+
+私の場合は、以下であった
+```py
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+```
+この場合、`DATABASES`は
+```py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+```
+また、`STATIC_ROOT = os.path.join(BASE_DIR, 'static')`も異なると考えられる（が、そもそもこれを書くのは一番上の階層にstaticフォルダを作る時かな）
+
 ### manage.py
 このプロジェクトで実行するさまざまな機能に関するプログラム。  
 Djangoではコマンドでプロジェクトを色々操作するが、そのための処理がここに書かれている。  

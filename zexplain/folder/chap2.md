@@ -22,6 +22,9 @@
 |staticフォルダ|静的ファイルを置いておく|
 |forms.py|フォームのためのスクリプトファイル|
 
+templatesフォルダについて
+[こちら](https://qiita.com/aksuzuki/items/785c40b787936c7f0314)をご覧ください。書籍には「アプリケーションフォルダごとにtemplatesフォルダを用意」とありますが、こちらのサイトのようにtemplatesフォルダの場所を変えることもできます。  
+
 ## views.py
 ```
 from django.shortcuts import render

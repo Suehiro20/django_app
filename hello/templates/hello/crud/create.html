@@ -9,13 +9,16 @@
     <link rel="stylesheet" type="text/css" href="{% static 'hello/css/style.css' %}" />
 </head>
 <body>
-    <h1>Hello/{{ title }}</h1>
-    <p>{{ msg }}</p>
-    <p><a href="{% url goto %}">{{ goto }}</a></p>
-    <p><a href="{% url form %}">{{ form }}</a></p>
-    <p><a href="{% url users %}">{{ users }}</a></p>
-    <p><a href="{% url manager %}">{{ manager }}</a></p>
-    <p><a href="{% url 'crudindex' %}">crud</a></p>
-    <p><a href="{% url 'find' %}">find</a></p>
+    <h1>Hello/Create/{{ title }}</h1>
+    <table>
+        <form action="{% url 'create' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td><input type="submit" value="click"></td>
+            </tr>
+        </form>
+    </table>
 </body>
 </html>
