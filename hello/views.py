@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, FriendForm
+from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, FriendForm, FindForm
 from .models import Friend
 from django.db.models import QuerySet
 
@@ -293,3 +293,21 @@ def delete(request, num):
         'obj': friend
     }
     return render(request, 'hello/crud/delete.html', params)
+
+def find(request):
+    if (request.method == 'POST'):
+        msg = 'serch result:'
+        form = FindForm(request.POST)
+        str = request.POST['find']
+        data = Friend.objects.filter(name__icontains=str)
+    else:
+        msg = 'serch words ...'
+        form = FindForm()
+        data = Friend.objects.all()
+    params = {
+        'title': 'Find',
+        'message': msg,
+        'form': form,
+        'data': data,
+    }
+    return render(request, 'hello/find.html', params)
