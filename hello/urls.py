@@ -30,4 +30,9 @@ urlpatterns = [
     path('crud/edit/<int:num>', views.edit, name='edit'),
     path('crud/delete/<int:num>', views.delete, name='delete'),
     path('find', views.find, name='find'),
+    path('data', views.age, name='age'),
+    path('data/reverse', views.agerev, name='agerev'),
+    path('data/find', views.select, name="select"),
+    path('data/syukei', views.syukei, name='syukei'),
+    path('data/sqlquery', views.sqlquery, name='sqlquery'),
 ]
