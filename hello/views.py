@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, FriendForm, FindForm
 from .models import Friend
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Count, Sum, Avg, Min, Max
 
 def index(request):
     params = {
@@ -311,3 +311,82 @@ def find(request):
         'data': data,
     }
     return render(request, 'hello/find.html', params)
+
+def age(request):
+    data = Friend.objects.all().order_by('age')
+    params = {
+        'title': 'Hello',
+        'message': '',
+        'data': data,
+    }
+    return render(request, 'hello/data/index.html', params)
+
+def agerev(request):
+    data = Friend.objects.all().order_by('age').reverse()
+    params = {
+        'title': 'Hello',
+        'message': '',
+        'data': data,
+    }
+    return render(request, 'hello/data/index.html', params)
+
+def select(request):
+    if (request.method == 'POST'):
+        msg = 'serch result:'
+        form = FindForm(request.POST)
+        str = request.POST['find']
+        list = str.split()
+        data = Friend.objects.all()[int(list[0]):int(list[1])]
+    else:
+        msg = 'serch words ...'
+        form = FindForm()
+        data = Friend.objects.all()
+    params = {
+        'title': 'Find',
+        'message': msg,
+        'form': form,
+        'data': data,
+        'path': 'select',
+    }
+    return render(request, 'hello/data/find.html', params)
+
+def syukei(request):
+    data = Friend.objects.all()
+    re1 = Friend.objects.aggregate(Count('age'))
+    re2 = Friend.objects.aggregate(Sum('age'))
+    re3 = Friend.objects.aggregate(Avg('age'))
+    re4 = Friend.objects.aggregate(Min('age'))
+    re5 = Friend.objects.aggregate(Max('age'))
+    msg = 'Count:' + str(re1['age__count'])\
+        + '<br>Sum:' + str(re2['age__sum'])\
+        + '<br>Average:' + str(re3['age__avg'])\
+        + '<br>Min:' + str(re4['age__min'])\
+        + '<br>Max:' + str(re5['age__max'])
+    params = {
+        'title': 'Hello',
+        'message': msg,
+        'data': data
+    }
+    return render(request, 'hello/data/index.html', params)
+
+def sqlquery(request):
+    if (request.method == 'POST'):
+        msg = request.POST['find']
+        form = FindForm(request.POST)
+        sql = 'select * from hello_friend'
+        if (msg != ''):
+            sql += ' where ' + msg
+        data = Friend.objects.raw(sql)
+        msg = sql
+    else:
+        msg = 'serch words...'
+        form = FindForm()
+        data = Friend.objects.all()
+    params = {
+        'title': 'Hello',
+        'message': msg,
+        'form': form,
+        'data': data,
+        'path': 'sqlquery',
+    }
+    return render(request, 'hello/data/find.html', params)
