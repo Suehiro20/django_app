@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, IdForm, Create, FriendForm, FindForm
-from .models import Friend
+from .forms import HelloForm, FirstForm, SecondForm, ThirdForm, FourthForm, FifthForm, SixthForm, \
+    IdForm, Create, FriendForm, FindForm, CheckForm, MessageForm
+from .models import Friend, Message
 from django.db.models import QuerySet, Count, Sum, Avg, Min, Max
+from django.core.paginator import Paginator
 
 def index(request):
     params = {
@@ -390,3 +392,68 @@ def sqlquery(request):
         'path': 'sqlquery',
     }
     return render(request, 'hello/data/find.html', params)
+
+def check(request):
+    params = {
+        'title': 'Hello',
+        'message': 'check validation',
+        'form': CheckForm(),
+    }
+    if (request.method == 'POST'):
+        form = CheckForm(request.POST)
+        params['form'] = form
+        if (form.is_valid()):
+            params['message'] = 'OK!'
+        else:
+            params['message'] = 'not good.'
+    return render(request, 'hello/check.html', params)
+
+def checktwo(request):
+    params = {
+        'title': 'Hello',
+        'message': 'check validation.',
+        'form': FriendForm(),
+    }
+    if (request.method == 'POST'):
+        obj = Friend()
+        form = FriendForm(request.POST, instance=obj)
+        params['form'] = form
+        if (form.is_valid()):
+            params['message'] = 'OK!'
+        else:
+            params['message'] = 'not good.'
+    return render(request, 'hello/checks.html', params)
+
+def page(request, num=1):
+    data = Friend.objects.all()
+    page = Paginator(data, 3)
+    params = {
+        'title': 'Hello',
+        'message': '',
+        'data': page.get_page(num),
+    }
+    return render(request, 'hello/page.html', params)
+
+def message(request, page=1):
+    if (request.method == 'POST'):
+        obj = Message()
+        form = MessageForm(request.POST, instance=obj)
+        form.save()
+    data = Message.objects.all().reverse()
+    paginator = Paginator(data, 5)
+    params = {
+        'title': 'Message',
+        'form': MessageForm(),
+        'data': paginator.get_page(page),
+    }
+    return render(request, 'hello/message.html', params)
+
+def top(request, num=1):
+    data = Friend.objects.all()
+    page = Paginator(data, 3)
+    params = {
+        'title': 'Hello',
+        'message': '',
+        'data': page.get_page(num),
+    }
+    return render(request, 'hello/top.html', params)

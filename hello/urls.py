@@ -35,4 +35,13 @@ urlpatterns = [
     path('data/find', views.select, name="select"),
     path('data/syukei', views.syukei, name='syukei'),
     path('data/sqlquery', views.sqlquery, name='sqlquery'),
+    path('check', views.check, name='check'),
+    path('check/2', views.checktwo, name='checktwo'),
+    path('checks', views.checktwo, name='checks'),
+    path('page', views.page, name='page'),
+    path('page/<int:num>', views.page, name='page'),
+    path('message/', views.message, name='message'),
+    path('message/<int:page>', views.message, name='message'),
+    path('top', views.top, name='top'),
+    path('top/<int:num>', views.top, name='top'),
 ]
