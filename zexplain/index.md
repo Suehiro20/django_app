@@ -15,4 +15,7 @@ zexplain
     chap9.md
   database2
     chap10.md
+    chap11.md
+    chap12.md
+    chap13.md
 ```
