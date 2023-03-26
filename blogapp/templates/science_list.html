@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block title %}Django's Blog{% endblock %}
+{% block title %}Django's Blog - Science{% endblock %}
 
 {% block header %}
 <header class="masthead" style="background-image: url({% static 'assets/img/home-bg.jpg' %})">
@@ -11,7 +11,7 @@
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="site-heading">
                     <h1>Django's Blog</h1>
-                    <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                    <span class="subheading">Scienceカテゴリの記事一覧</span>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
 <div class="container px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
         <div class="col-md-10 col-lg-8 col-xl-7">
-            {% for record in orderby_records %}
+            {% for record in science_records %}
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="{% url 'blogapp:blog_detail' record.pk %}">
