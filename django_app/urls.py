@@ -22,4 +22,5 @@ urlpatterns = [
     # path('hello/', hello.index),
     path('hello/', include('hello.urls')),
     path('blogapp/', include('blogapp.urls')),
+    path('photo/', include('photo.urls')),
 ]
