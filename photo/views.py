@@ -3,6 +3,6 @@ from django.views.generic import TemplateView
 
 # Create your views here.
 
-class PhotoIndexView(TemplateView):
-    template_name = 'index.html'
+class IndexView(TemplateView):
+    template_name = 'index_p.html'
 

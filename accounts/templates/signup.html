@@ -1,0 +1,40 @@
+{% extends 'base_p.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block contents %}
+  <hr />
+  <div class="container">
+    <div class="row">
+      <div class="col offset-2">
+        <h3>サインアップ</h3>
+        <form method="post">
+          {% csrf_token %}
+
+          {% for field in form %}
+          <p>
+            {{ field.label_tag }}<br />
+            {{ field }}<br />
+
+            {% if field.help_text %}
+              <small style="color: grey;">{{ field.help_text }}</small>
+            {% endif %}
+
+            {% for error in field.errors %}
+              <p style="color: red;">{{ error }}</p>
+            {% endfor %}
+          </p>
+          {% endfor %}
+          <p style="color: red;">
+            ※メアドはパスワードリセットの際に必要になるので、登録をお願いします。
+          </p>
+          <input type="submit" value="Sign Up" />
+        </form>
+        <br />
+        <p>
+          <a href="{% url 'photo:index' %}">登録をやめてトップページへ戻る</a>
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

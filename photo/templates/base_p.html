@@ -44,9 +44,15 @@
             <div class="col-sm-4 offset-md-1 py-4">
               <h4 class="text-white">Contact</h4>
               <ul class="list-unstyled">
-                <li><a href="#" class="text-white">サインアップ</a></li>
-                <li><a href="#" class="text-white">ログイン</a></li>
-                <li><a href="#" class="text-white">Email me</a></li>
+                {% if user.is_authenticated %}
+                  <li><a href="#" class="text-white">マイページ</a></li>
+                  <li><a href="{% url 'accounts:logout' %}" class="text-white">ログアウト</a></li>
+                  <li><a href="{% url 'password_reset' %}" class="text-white">パスワード変更</a></li>
+                {% else %}
+                  <li><a href="{% url 'accounts:signup' %}" class="text-white">サインアップ</a></li>
+                  <li><a href="{% url 'accounts:login' %}" class="text-white">ログイン</a></li>
+                  <li><a href="#" class="text-white">Email me</a></li>
+                {% endif %}
               </ul>
             </div>
           </div>
